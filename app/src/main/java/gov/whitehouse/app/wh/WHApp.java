@@ -4,11 +4,7 @@ import android.app.Application;
 import android.content.Intent;
 
 import com.bugsnag.android.Bugsnag;
-import com.google.android.gms.analytics.GoogleAnalytics;
-import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.urbanairship.AirshipConfigOptions;
-import com.urbanairship.UAirship;
 
 import gov.whitehouse.BuildConfig;
 import timber.log.Timber;
@@ -18,25 +14,6 @@ import static com.google.android.gms.common.ConnectionResult.SUCCESS;
 public
 class WHApp extends Application
 {
-    private
-    Tracker mAppTracker;
-
-    public
-    Tracker getTracker()
-    {
-        return mAppTracker;
-    }
-
-    private
-    void configureAnalytics()
-    {
-        if (GooglePlayServicesUtil.isGooglePlayServicesAvailable(this) == SUCCESS) {
-            GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
-            mAppTracker = analytics.newTracker(gov.whitehouse.R.xml.google_analytics);
-            mAppTracker.enableAutoActivityTracking(true);
-            mAppTracker.setAnonymizeIp(true);
-        }
-    }
 
     private
     void configureBugsnag()
@@ -47,28 +24,10 @@ class WHApp extends Application
     }
 
     private
-    void configureUrbanAirship()
-    {
-        AirshipConfigOptions options = AirshipConfigOptions.loadDefaultOptions(this);
-        options.inProduction = !BuildConfig.DEBUG;
-        UAirship.takeOff(this, options);
-        UAirship.shared().getPushManager().setUserNotificationsEnabled(true);
-    }
-
-    private
     void pokeLiveService()
     {
         final Intent sIntent = new Intent(this, LiveService.class);
         startService(sIntent);
-    }
-
-    private
-    void watchPrefs()
-    {
-        GoogleAnalytics.getInstance(this).setAppOptOut(!WHPrefs.optInToAnalytics.getValue());
-        WHPrefs.optInToAnalytics.watch().subscribe(optIn -> {
-            GoogleAnalytics.getInstance(this).setAppOptOut(!optIn);
-        });
     }
 
     @Override
@@ -78,17 +37,14 @@ class WHApp extends Application
         super.onCreate();
 
         configureBugsnag();
-        configureUrbanAirship();
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
         } else {
             Timber.plant(new CrashReportingTree());
         }
         WHPrefs.initPrefs(this);
-        watchPrefs();
         pokeLiveService();
         if (WHPrefs.optInToAnalytics.getValue()) {
-            configureAnalytics();
         }
     }
 

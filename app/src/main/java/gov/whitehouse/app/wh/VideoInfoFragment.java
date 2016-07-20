@@ -248,21 +248,10 @@ class VideoInfoFragment extends BaseFragment
                 mPlayButton.setText("Play video");
             }
             mPlayButton.setOnClickListener(v -> {
-                if (getTracker() != null) {
-                    getTracker().send(new HitBuilders.EventBuilder()
-                    .setCategory("VideoInfo")
-                    .setAction("playClick")
-                    .setLabel(mFeedItem.videoLink())
-                    .build());
-                }
                 Intent playIntent = new Intent(Intent.ACTION_VIEW);
                 playIntent.setData(Uri.parse(mFeedItem.videoLink()));
                 startActivity(playIntent);
             });
-            if (getTracker() != null) {
-                getTracker().setScreenName("VideoInfo");
-                getTracker().setPage(mFeedItem.videoLink());
-            }
         }
     }
 

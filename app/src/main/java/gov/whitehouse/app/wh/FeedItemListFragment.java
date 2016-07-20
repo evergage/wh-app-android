@@ -269,14 +269,6 @@ class FeedItemListFragment extends BaseListFragment<FeedItemData>
         } else if (mFeedType == TYPE_LIVE) {
             getEmptyView().setText(R.string.empty_live_list);
         }
-        if (getTracker() != null) {
-            getTracker().setScreenName("FeedItemList");
-            if (mFeedType == TYPE_FAVORITES) {
-                getTracker().setPage("Favorites");
-            } else {
-                getTracker().setPage(mFeedUrl);
-            }
-        }
     }
 
     @Override

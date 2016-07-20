@@ -52,21 +52,11 @@ class SearchFragment extends BaseListFragment<SearchResult>
     {
         super.onStart();
         getAdapter().setOnItemClickListener((itemView, position) -> {
-            if (getTracker() != null) {
-                getTracker().send(new HitBuilders.EventBuilder()
-                .setCategory("Search")
-                .setAction("itemClick")
-                .setLabel(getAdapter().getItem(position).unescapedUrl())
-                .build());
-            }
             if (mSearchResultClickedListener != null) {
                 mSearchResultClickedListener.onSearchResultClicked(getAdapter().getItem(position),
                                                                    position);
             }
         });
-        if (getTracker() != null) {
-            getTracker().setScreenName("Search");
-        }
     }
 
     @Override
@@ -150,9 +140,6 @@ class SearchFragment extends BaseListFragment<SearchResult>
                     }
                 });
         bindSubscription(mSearchSub);
-        if (getTracker() != null) {
-            getTracker().set("searchQuery", query);
-        }
     }
 
     public static

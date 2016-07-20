@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 
 import com.bugsnag.android.Bugsnag;
-import com.google.android.gms.analytics.Tracker;
 
 import gov.whitehouse.app.wh.NoConnActivity;
 import gov.whitehouse.app.wh.WHApp;
@@ -27,12 +26,6 @@ public abstract class BaseActivity extends ActionBarActivity {
             }
         }
         return true;
-    }
-
-    public
-    Tracker getTracker()
-    {
-        return ((WHApp) getApplication()).getTracker();
     }
 
     protected void

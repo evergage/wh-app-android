@@ -25,8 +25,6 @@ import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.TextView;
 
-import com.urbanairship.google.PlayServicesUtils;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -172,14 +170,6 @@ public class MainActivity extends BaseActivity
     }
 
     private void
-    checkForGooglePlayServices()
-    {
-        if (PlayServicesUtils.isGooglePlayStoreAvailable()) {
-            PlayServicesUtils.handleAnyPlayServicesError(this);
-        }
-    }
-
-    private void
     configureLeftDrawer()
     {
         ViewGroup.LayoutParams lps = mLeftDrawer.getLayoutParams();
@@ -301,7 +291,6 @@ public class MainActivity extends BaseActivity
     private void
     createActivity(Bundle icicle)
     {
-        checkForGooglePlayServices();
         createDrawer();
         createToolbarMenu();
         TextView titleView = (TextView) mToolbar.findViewById(R.id.title);

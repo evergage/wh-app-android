@@ -112,12 +112,6 @@ public abstract class BaseFragment extends Fragment {
     }
 
     public
-    Tracker getTracker()
-    {
-        return ((WHApp) getActivity().getApplication()).getTracker();
-    }
-
-    public
     boolean isRootFragment()
     {
         return true;

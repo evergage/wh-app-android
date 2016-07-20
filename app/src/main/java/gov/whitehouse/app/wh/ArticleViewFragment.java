@@ -299,10 +299,6 @@ class ArticleViewFragment extends BaseFragment
         if (mWebView != null) {
             mWebView.onResume();
         }
-        if (getTracker() != null) {
-            getTracker().setScreenName("ArticleView");
-            getTracker().setPage(mFeedItem.link());
-        }
     }
 
     @Override

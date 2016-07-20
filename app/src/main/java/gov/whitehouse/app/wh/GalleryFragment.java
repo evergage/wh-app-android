@@ -266,9 +266,6 @@ class GalleryFragment extends BaseFragment
                 mIndex = position;
                 configureOverflow(mFeedItems.get(position).favorited());
                 mPageCount.setText(String.valueOf(position + 1) + " / " + String.valueOf(mPagerAdapter.getCount()));
-                if (getTracker() != null) {
-                    getTracker().setPage(mFeedItems.get(position).link());
-                }
             }
 
             @Override
@@ -288,9 +285,6 @@ class GalleryFragment extends BaseFragment
         mPager.setCurrentItem(mIndex);
         mProgress.setVisibility(View.GONE);
         mPager.setVisibility(View.VISIBLE);
-        if (getTracker() != null) {
-            getTracker().setScreenName("Gallery");
-        }
     }
 
     @Override
