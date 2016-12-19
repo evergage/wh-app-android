@@ -4,12 +4,12 @@ import android.app.Application;
 import android.content.Intent;
 
 import com.bugsnag.android.Bugsnag;
-import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.evergage.android.Evergage;
+import com.evergage.android.LogLevel;
+
 
 import gov.whitehouse.BuildConfig;
 import timber.log.Timber;
-
-import static com.google.android.gms.common.ConnectionResult.SUCCESS;
 
 public
 class WHApp extends Application
@@ -35,6 +35,34 @@ class WHApp extends Application
     void onCreate()
     {
         super.onCreate();
+
+        // Initialize Evergage
+
+        Evergage.setLogLevel(LogLevel.ALL);
+        Evergage.initialize(this);
+        Evergage evergage = Evergage.getInstance();
+
+        // Prod:
+        evergage.start("demo", "whitehouse");
+
+        // Local:
+//        try {
+//            JSONObject clientConfig = new JSONObject();
+//            clientConfig.put("useCDN", false);
+//            clientConfig.put("protocol", "https");
+//            clientConfig.put("domain", "localtest.evergage.com");
+//            clientConfig.put("port", 8443);
+//            clientConfig.put("dataset", "engage");
+//            clientConfig.put("account", "localtest");
+//
+//            Method method = evergage.getClass().getDeclaredMethod("startWithConfiguration", JSONObject.class);
+//            method.setAccessible(true);
+//            method.invoke(evergage, clientConfig);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+
+        // App code below
 
         configureBugsnag();
         if (BuildConfig.DEBUG) {

@@ -20,7 +20,14 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
+import com.evergage.android.Evergage;
+import com.evergage.android.Screen;
+import com.evergage.android.promote.Article;
+import com.evergage.android.promote.Tag;
+
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -59,6 +66,9 @@ class ArticleViewFragment extends BaseFragment
     @InjectView(R.id.webview)
     WebView mWebView;
 
+    Screen screen;
+    Article article;
+
     public static
     ArticleViewFragment newInstance(FeedItem feed_item)
     {
@@ -94,6 +104,22 @@ class ArticleViewFragment extends BaseFragment
         mPageJson = getPageJson(mFeedItem);
         mFavorited = mFeedItem.favorited();
         setHasOptionsMenu(true);
+
+        screen = Evergage.getInstance().getScreenForActivity(this.getActivity());
+
+        // Evergage - Build an Article to track
+        article = new Article(mFeedItem.guid());
+        article.name = mFeedItem.title();
+        article.description = mFeedItem.description();
+        article.modifiedDate = mFeedItem.pubDate();
+        article.imageUrl = mFeedItem.getBestThumbnailUrl(1500);
+        article.url = mFeedItem.link();
+        List<Tag> tags = new ArrayList<>();
+        Tag author = new Tag(mFeedItem.creator(), Tag.Type.Author);
+        tags.add(author);
+        article.tags = tags;
+
+
     }
 
     @Override
@@ -104,6 +130,7 @@ class ArticleViewFragment extends BaseFragment
         if (getArguments() != null) {
             getArguments().putParcelable(EXTRA_FEED_ITEM, mFeedItem);
         }
+        screen.viewItem(null);
     }
 
     @Override
@@ -318,6 +345,9 @@ class ArticleViewFragment extends BaseFragment
         if (mMenu == null) {
             onCreateToolbar(getToolbar());
         }
+
+        // Evergage - Track item view
+        screen.viewItem(article);
     }
 
     @Override

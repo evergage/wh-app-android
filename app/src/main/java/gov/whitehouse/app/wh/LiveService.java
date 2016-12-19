@@ -192,16 +192,21 @@ class LiveService extends IntentService
             return;
         }
         FeedManager.updateFeedFromServer(liveItem.feedUrl(), liveItem.title(), liveItem.viewType());
-        feedItems = FeedManager.observeFeedItems(liveItem.feedUrl())
-                .toBlocking()
-                .first();
-        for (FeedItem item : feedItems) {
-            if (item != null && item.pubDate() != null) {
-                validItems.add(item);
+        // todo - fix live feed
+        try {
+            feedItems = FeedManager.observeFeedItems(liveItem.feedUrl())
+                    .toBlocking()
+                    .first();
+            for (FeedItem item : feedItems) {
+                if (item != null && item.pubDate() != null) {
+                    validItems.add(item);
+                }
             }
+            sLiveItemCountObservable.onNext(Observable.just(validItems.size()));
+            mLiveEvents = validItems;
+        } catch (Exception e) {
+            // no live events found
         }
-        sLiveItemCountObservable.onNext(Observable.just(validItems.size()));
-        mLiveEvents = validItems;
     }
 
     private
