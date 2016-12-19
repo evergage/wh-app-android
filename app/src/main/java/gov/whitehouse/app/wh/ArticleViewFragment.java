@@ -114,12 +114,8 @@ class ArticleViewFragment extends BaseFragment
         article.modifiedDate = mFeedItem.pubDate();
         article.imageUrl = mFeedItem.getBestThumbnailUrl(1500);
         article.url = mFeedItem.link();
-        List<Tag> tags = new ArrayList<>();
-        Tag author = new Tag(mFeedItem.creator(), Tag.Type.Author);
-        tags.add(author);
-        article.tags = tags;
 
-
+        // todo: add authors as Tags - mFeedItem.creator() may return authors in <a> tags
     }
 
     @Override
