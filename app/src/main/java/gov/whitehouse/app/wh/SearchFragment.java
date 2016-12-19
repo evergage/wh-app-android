@@ -5,7 +5,12 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.Toast;
 
-import com.google.android.gms.analytics.HitBuilders;
+import com.evergage.android.internal.util.JSONUtil;
+import com.evergage.android.promote.Article;
+import com.evergage.android.promote.Item;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,8 +18,6 @@ import java.util.List;
 import gov.whitehouse.R;
 import gov.whitehouse.app.BaseListFragment;
 import gov.whitehouse.core.manager.SearchManager;
-import gov.whitehouse.data.model.BoostedSearchResult;
-import gov.whitehouse.data.model.SearchResult;
 import gov.whitehouse.util.NetworkUtils;
 import gov.whitehouse.widget.BaseAdapter;
 import gov.whitehouse.widget.wh.SearchItemAdapter;
@@ -25,7 +28,7 @@ import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 public
-class SearchFragment extends BaseListFragment<SearchResult>
+class SearchFragment extends BaseListFragment<Item>
 {
     private
     OnSearchResultClickedListener mSearchResultClickedListener;
@@ -41,7 +44,7 @@ class SearchFragment extends BaseListFragment<SearchResult>
 
     @Override
     public
-    BaseAdapter<SearchResult> onCreateAdapter()
+    BaseAdapter<Item> onCreateAdapter()
     {
         return new SearchItemAdapter();
     }
@@ -97,21 +100,25 @@ class SearchFragment extends BaseListFragment<SearchResult>
                 .search(query)
                 .first()
                 .map(searchResults -> {
-                    List<SearchResult> list = new ArrayList<>();
-                    SearchResult result;
-                    if (searchResults.boosted_results() != null) {
-                        for (BoostedSearchResult b : searchResults.boosted_results()) {
-                            result = SearchResult.create(b.description(), b.title(), b.url());
-                            list.add(result);
+                    List<Item> list = new ArrayList<>();
+                    // Build Items from SmartSearch results
+                    JSONObject results = new JSONObject(searchResults);
+                    JSONArray recommendedItems = JSONUtil.getJSONArray(results, "recommendedItems");
+                    if (recommendedItems != null) {
+                        for (int i = 0; i < recommendedItems.length(); i++) {
+                            JSONObject itemJson = JSONUtil.arrayGetJSONObject(recommendedItems, i);
+                            if (itemJson != null) {
+                                String id = JSONUtil.getString(itemJson, "_id");
+                                if (id == null) id = "article-" + i;
+                                Article article = Article.fromJSONObject(itemJson, id);
+                                list.add(article);
+                            }
                         }
-                    }
-                    if (searchResults.results() != null) {
-                        list.addAll(searchResults.results());
                     }
                     return list;
                 })
                 .subscribeOn(Schedulers.newThread()))
-                .subscribe(new Observer<List<SearchResult>>()
+                .subscribe(new Observer<List<Item>>()
                 {
                     @Override
                     public
@@ -131,7 +138,7 @@ class SearchFragment extends BaseListFragment<SearchResult>
 
                     @Override
                     public
-                    void onNext(List<SearchResult> searchResults)
+                    void onNext(List<Item> searchResults)
                     {
                         getAdapter().clear();
                         if (searchResults != null) {
@@ -146,6 +153,6 @@ class SearchFragment extends BaseListFragment<SearchResult>
     interface OnSearchResultClickedListener
     {
         public
-        void onSearchResultClicked(SearchResult result, int position);
+        void onSearchResultClicked(Item result, int position);
     }
 }

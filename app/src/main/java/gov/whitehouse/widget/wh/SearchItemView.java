@@ -8,15 +8,16 @@ import android.view.LayoutInflater;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.evergage.android.promote.Item;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import gov.whitehouse.R;
-import gov.whitehouse.data.model.SearchResult;
 import gov.whitehouse.widget.BaseAdapter;
 import gov.whitehouse.widget.Bindable;
 
 public
-class SearchItemView extends FrameLayout implements Bindable<SearchResult>
+class SearchItemView extends FrameLayout implements Bindable<Item>
 {
 
     @InjectView(R.id.selector_frame)
@@ -55,9 +56,9 @@ class SearchItemView extends FrameLayout implements Bindable<SearchResult>
 
     @Override
     public
-    void onBindWith(SearchResult data, int position)
+    void onBindWith(Item data, int position)
     {
-        mTitle.setText(data.title());
+        mTitle.setText(data.name);
     }
 
     @Override

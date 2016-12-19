@@ -3,9 +3,9 @@ package gov.whitehouse.core.manager;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 
+import java.util.Map;
 import gov.whitehouse.BuildConfig;
 import gov.whitehouse.core.Constants;
-import gov.whitehouse.data.model.SearchResults;
 import gov.whitehouse.util.GsonUtils;
 import retrofit.RestAdapter;
 import retrofit.converter.GsonConverter;
@@ -36,7 +36,7 @@ class SearchManager
     }
 
     public
-    Observable<SearchResults> search(String query)
+    Observable<Map<String, Object>> search(String query)
     {
         SearchService ss;
         RestAdapter ra = getRestAdapter();
@@ -52,8 +52,9 @@ class SearchManager
     private static
     interface SearchService
     {
-
-        @GET("/api/search.json?hl=false&affiliate=wh")
-        Observable<SearchResults> search(@Query("query") String query);
+        // The SmartSearch request
+        //https://{accountName}.evergage.com/api/dataset/{dataset}/recommendations/{recipeId}/smartSearch?userId={userIdOrAnonId}&anonymous={trueIfAnonId}
+        @GET("/api/dataset/whitehouse/recommendations/EMbKG/smartSearch?userId=TestSmartSearchUser")
+        Observable<Map<String, Object>> search(@Query("query") String query);
     }
 }

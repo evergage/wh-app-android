@@ -282,7 +282,7 @@ public class MainActivity extends BaseActivity
         mSearchFragment = findOrCreateSearchFragment();
         mSearchFragment.setSearchResultClickedListener((result, position) -> {
             Intent goIntent = new Intent(Intent.ACTION_VIEW);
-            goIntent.setData(Uri.parse(result.unescapedUrl()));
+            goIntent.setData(Uri.parse(result.url));
             startActivity(goIntent);
         });
         configureSearchView();
