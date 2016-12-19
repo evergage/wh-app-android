@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 
-import com.bugsnag.android.Bugsnag;
 
 import gov.whitehouse.app.wh.NoConnActivity;
 import gov.whitehouse.app.wh.WHApp;
@@ -32,7 +31,6 @@ public abstract class BaseActivity extends ActionBarActivity {
     onCreate(Bundle icicle, int layoutRes)
     {
         super.onCreate(icicle);
-        Bugsnag.onActivityCreate(this);
         Icepick.restoreInstanceState(this, icicle);
         setContentView(layoutRes);
     }
@@ -49,7 +47,6 @@ public abstract class BaseActivity extends ActionBarActivity {
     void onDestroy()
     {
         super.onDestroy();
-        Bugsnag.onActivityDestroy(this);
     }
 
     @Override
@@ -57,7 +54,6 @@ public abstract class BaseActivity extends ActionBarActivity {
     void onPause()
     {
         super.onPause();
-        Bugsnag.onActivityPause(this);
     }
 
     @Override
@@ -65,7 +61,6 @@ public abstract class BaseActivity extends ActionBarActivity {
     void onResume()
     {
         super.onResume();
-        Bugsnag.onActivityResume(this);
     }
 
     @Override

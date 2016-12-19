@@ -3,7 +3,6 @@ package gov.whitehouse.app.wh;
 import android.app.Application;
 import android.content.Intent;
 
-import com.bugsnag.android.Bugsnag;
 import com.evergage.android.Evergage;
 import com.evergage.android.LogLevel;
 
@@ -14,14 +13,6 @@ import timber.log.Timber;
 public
 class WHApp extends Application
 {
-
-    private
-    void configureBugsnag()
-    {
-        Bugsnag.register(this, "77d9c523c3567a4537c341cb1dd06c09");
-        Bugsnag.setReleaseStage(BuildConfig.BUILD_TYPE);
-        Bugsnag.setProjectPackages("gov.whitehouse");
-    }
 
     private
     void pokeLiveService()
@@ -64,7 +55,7 @@ class WHApp extends Application
 
         // App code below
 
-        configureBugsnag();
+
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
         } else {
@@ -86,12 +77,6 @@ class WHApp extends Application
         public
         void e(Throwable t, String message, Object... args)
         {
-            String infoString = String.format(message, args);
-            if (t != null) {
-                Bugsnag.notify(new Throwable(infoString, t), SEVERITY_ERROR);
-            } else {
-                Bugsnag.notify(new Throwable(infoString), SEVERITY_ERROR);
-            }
         }
     }
 }
